@@ -19,7 +19,7 @@ export default function ListBirthday(props){
                 )
                 :
                 (
-                    <AddtBirthday user={user}></AddtBirthday>
+                    <AddtBirthday user={user} setShowList={setShowList}></AddtBirthday>
                 )
             }
             <ActionBar showList ={showList} setShowList={setShowList} ></ActionBar>
