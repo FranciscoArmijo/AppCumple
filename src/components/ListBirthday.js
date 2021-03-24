@@ -69,7 +69,7 @@ export default function ListBirthday(props){
     const deleteBirthday= (birthday) =>{
         Alert.alert(
             'Eliminar Cumpleaños',
-            `¿Estas seguro de eliminar el cummpleaños de ${birtday.name}?`,
+            `¿Estas seguro de eliminar el cummpleaños de ${birthday.name}?`,
             [
                 {
                     text:'Cancelar',
@@ -78,10 +78,15 @@ export default function ListBirthday(props){
                 {
                     text:'Eliminar',
                     onPress:()=>{
-                        console.log('...ELiminando')
+                        db.collection(user.uid)
+                            .doc(birthday.id)
+                            .delete().then(()=>{
+                                setReloadData(true);
+                            })
                     }
-                }
-            ]
+                },
+            ],
+            {cancelable:false},
         )
     }
 
@@ -91,10 +96,10 @@ export default function ListBirthday(props){
                 (
                     <ScrollView style={styles.scrollview}>
                         {birtday.map((item, index)=>(
-                            <Birthday key={index} birthday={item}></Birthday>
+                            <Birthday key={index} birthday={item} deleteBirthday={deleteBirthday}></Birthday>
                         ))}
                         {pasatBirtday.map((item, index)=>(
-                            <Birthday key={index} birthday={item}></Birthday>
+                            <Birthday key={index} birthday={item} deleteBirthday={deleteBirthday}></Birthday>
                         ))
                         }
                         
