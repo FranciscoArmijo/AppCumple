@@ -5,7 +5,7 @@ import moment from 'moment';
 import firebase from '../utils/firebase';
 import 'firebase/firestore';
 
-//firebase.firestore().settings({experimentalForceLongPolling : true});
+firebase.firestore().settings({experimentalForceLongPolling : true});
 const db = firebase.firestore(firebase);
 
 export default function AddtBirthday(props){

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native'
+import {StyleSheet, View, ScrollView, Alert} from 'react-native'
 import moment from 'moment';
 import ActionBar from './ActionBar'
 import AddtBirthday from './AddBirthday'
@@ -8,7 +8,7 @@ import 'firebase/firestore';
 import Birthday from './Birthday';
 
 
-firebase.firestore().settings({experimentalForceLongPolling : true});
+//firebase.firestore().settings({experimentalForceLongPolling : true});
 const db = firebase.firestore(firebase);
 
 export default function ListBirthday(props){
@@ -64,6 +64,25 @@ export default function ListBirthday(props){
         });
             setBirthday(birthdayTempArray);
             setPasatBirthday(pasatBirthdayTempArray);
+    }
+
+    const deleteBirthday= (birthday) =>{
+        Alert.alert(
+            'Eliminar Cumpleaños',
+            `¿Estas seguro de eliminar el cummpleaños de ${birtday.name}?`,
+            [
+                {
+                    text:'Cancelar',
+                    style:'cancel'
+                },
+                {
+                    text:'Eliminar',
+                    onPress:()=>{
+                        console.log('...ELiminando')
+                    }
+                }
+            ]
+        )
     }
 
     return(
