@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native'
+import {StyleSheet, Text, View, ScrollView} from 'react-native'
 import moment from 'moment';
 import ActionBar from './ActionBar'
 import AddtBirthday from './AddBirthday'
 import firebase from '../utils/firebase';
 import 'firebase/firestore';
+import Birthday from './Birthday';
 
 
-//firebase.firestore().settings({experimentalForceLongPolling : true});
+firebase.firestore().settings({experimentalForceLongPolling : true});
 const db = firebase.firestore(firebase);
 
 export default function ListBirthday(props){
@@ -15,6 +16,7 @@ export default function ListBirthday(props){
     const [showList, setShowList] = useState(true);
     const [birtday, setBirthday] = useState([]);
     const [pasatBirtday, setPasatBirthday] = useState([]);
+    const [reloadData, setReloadData] = useState(false);
 
     useEffect(()=>{
         setBirthday([]);
@@ -31,7 +33,8 @@ export default function ListBirthday(props){
                 });
                 FormData(itemsArray);
             });
-    },[])
+            setReloadData(false);
+    },[reloadData]);
 
     const FormData = (items)=>{
         const currentDate = moment().set({
@@ -58,27 +61,29 @@ export default function ListBirthday(props){
             }else{
                 pasatBirthdayTempArray.push(itemTemp);
             };
-
+        });
             setBirthday(birthdayTempArray);
             setPasatBirthday(pasatBirthdayTempArray);
-
-        });
     }
 
     return(
         <View style ={styles.container}>
             {showList ? 
                 (
-                    <>
-                        <Text>Lista</Text>
-                        <Text>Lista</Text>
-                        <Text>Lista</Text>
-                        <Text>Lista</Text>
-                    </>
+                    <ScrollView style={styles.scrollview}>
+                        {birtday.map((item, index)=>(
+                            <Birthday key={index} birthday={item}></Birthday>
+                        ))}
+                        {pasatBirtday.map((item, index)=>(
+                            <Birthday key={index} birthday={item}></Birthday>
+                        ))
+                        }
+                        
+                    </ScrollView>
                 )
                 :
                 (
-                    <AddtBirthday user={user} setShowList={setShowList}></AddtBirthday>
+                    <AddtBirthday user={user} setShowList={setShowList} setReloadData={setReloadData}></AddtBirthday>
                 )
             }
             <ActionBar showList ={showList} setShowList={setShowList} ></ActionBar>
@@ -91,4 +96,8 @@ const styles = StyleSheet.create({
         alignItems:'center',
         height:'100%',
     },
+    scrollview:{
+        marginBottom: 50,
+        width:'100%'
+    }
 })

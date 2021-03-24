@@ -5,11 +5,11 @@ import moment from 'moment';
 import firebase from '../utils/firebase';
 import 'firebase/firestore';
 
-firebase.firestore().settings({experimentalForceLongPolling : true});
+//firebase.firestore().settings({experimentalForceLongPolling : true});
 const db = firebase.firestore(firebase);
 
 export default function AddtBirthday(props){
-    const {user, setShowList} = props;
+    const {user, setShowList,setReloadData} = props;
     const[isDatePickerVisible, setIsDatePickerVisible] = useState(false);
     const[formDate, setFormDate] = useState({});
     const [formError, setFormError] = useState({});
@@ -48,6 +48,7 @@ export default function AddtBirthday(props){
             db.collection(user.uid)
                 .add(data)
                 .then(()=>{
+                    setReloadData(true);
                     setShowList(true);
                 })
                 .catch(()=>{
@@ -55,6 +56,7 @@ export default function AddtBirthday(props){
                 })
         }
         setFormError(error);
+        
     }
 
     return(
